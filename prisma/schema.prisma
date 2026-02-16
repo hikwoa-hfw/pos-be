@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Sample {
+  id        Int       @id @default(autoincrement())
+  name      String
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("samples")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  role      Role      @default(USER)
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Transaction {
+  id                     Int                     @id @default(autoincrement())
+  uuid                   String                  @unique @default(uuid())
+  transactionStatus      TransactionStatus       @default(PENDING)
+  totalAmount            Int
+  adminFee               Int
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  deletedAt              DateTime?
+  transactionDetails     TransactionDetail[]
+
+  @@map("transactions")
+}
+
+enum TransactionStatus {
+  PENDING
+  CAPTURE
+  SETTLEMENT
+  DENY
+  CANCEL
+  EXPIRE
+  FAILURE
+}
+
+model TransactionDetail {
+  id                     Int                     @id @default(autoincrement())
+  transactionUuid        String
+  transactions           Transaction?            @relation(fields: [transactionUuid], references: [uuid])
+  quantity               Int
+  totalAmount            Int
+  notes                  String?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  deletedAt              DateTime?
+  itemTransactionDetails ItemTransactionDetail[]
+
+  @@map("transaction_details")
+}
+
+model ItemTransactionDetail {
+  id                  Int               @id @default(autoincrement())
+  transactionDetailId Int
+  transactionDetail   TransactionDetail @relation(fields: [transactionDetailId], references: [id])
+  itemId              Int
+  item                Item              @relation(fields: [itemId], references: [id])
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  deletedAt           DateTime?
+
+  @@map("item_transaction_details")
+}
+
+model Item {
+  id                     Int                     @id @default(autoincrement())
+  itemName               String
+  price                  Int
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  deletedAt              DateTime?
+  itemTransactionDetails ItemTransactionDetail[]
+
+  @@map("items")
+}
