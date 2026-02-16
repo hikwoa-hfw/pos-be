@@ -39,14 +39,17 @@ This project is a boilerplate for building a RESTful API using Express, Prisma, 
 Create a `.env` file in the root directory and add the following environment variables:
 
 ```env
-DATABASE_URL="postgresql://postgres:admin@localhost:6543/postgres"
+DATABASE_URL="postgresql://postgres@localhost:5432/eventador"
 PORT=8000
-JWT_SECRET=your_jwt_secret
-MAIL_USER=your_email@example.com
-MAIL_PASSWORD=your_email_password
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+JWT_SECRET=hndimsumsecret 
+MAIL_USER=test@mail.com
+MAIL_PASSWORD=test
+CLOUDINARY_CLOUD_NAME=cloudname
+CLOUDINARY_API_KEY=apikey
+CLOUDINARY_API_SECRET=apisecret
+MIDTRANS_SERVER_KEY=Mid-server-wXPR7KJdt2ML-C3v-ANfo1a7
+MIDTRANS_IS_PRODUCTION=false
+FE_URL=http://localhost:3000
 ```
 
 ## Scripts
